@@ -1,10 +1,16 @@
-#[macro_export]
-macro_rules! function_path {
-  () => {{
-    concat!(module_path!(), "::", function_name!())
-  }};
-}
-
+/// Logs a variable and its value, if at RUST_LOG=trace.
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate volmark;
+/// # use volmark::*;
+/// # #[named]
+/// # fn main() {
+/// let five = 5;
+/// trace_var!(five);
+/// # }
+/// ```
 #[macro_export]
 macro_rules! trace_var {
   ($var: expr) => {{
@@ -16,6 +22,19 @@ macro_rules! trace_var {
   }};
 }
 
+/// Logs a variable and its value, if at RUST_LOG>=debug
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate volmark;
+/// # use volmark::*;
+/// # #[named]
+/// # fn main() {
+/// let five = 5;
+/// debug_var!(five);
+/// # }
+/// ```
 #[macro_export]
 macro_rules! debug_var {
   ($var: expr) => {{
@@ -27,6 +46,19 @@ macro_rules! debug_var {
   }};
 }
 
+/// Logs a variable and its value, if at RUST_LOG>=info
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate volmark;
+/// # use volmark::*;
+/// # #[named]
+/// # fn main() {
+/// let five = 5;
+/// info_var!(five);
+/// # }
+/// ```
 #[macro_export]
 macro_rules! info_var {
   ($var: expr) => {{
@@ -38,6 +70,18 @@ macro_rules! info_var {
   }};
 }
 
+/// Traces entry into a function, if at RUST_LOG=trace
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate volmark;
+/// # use volmark::*;
+/// # #[named]
+/// # fn main() {
+/// trace_enter!();
+/// # }
+/// ```
 #[macro_export]
 macro_rules! trace_enter {
   () => {{
@@ -49,6 +93,18 @@ macro_rules! trace_enter {
   }};
 }
 
+/// Traces exit from a function, if at RUST_LOG=trace
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate volmark;
+/// # use volmark::*;
+/// # #[named]
+/// # fn main() {
+/// trace_exit!();
+/// # }
+/// ```
 #[macro_export]
 macro_rules! trace_exit {
   () => {{
@@ -56,23 +112,6 @@ macro_rules! trace_exit {
     {
       use log::*;
       trace!("[EXIT] {} @ line {}", function_name!(), line!());
-    }
-  }};
-}
-
-#[macro_export]
-macro_rules! trace_result {
-  ($var: expr) => {{
-    #[cfg(debug_assertions)]
-    {
-      use log::*;
-      trace!(
-        "[EXIT] {} @ line {} with {}: {:?}",
-        function_name!(),
-        line!(),
-        stringify!($var),
-        $var
-      );
     }
   }};
 }
