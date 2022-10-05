@@ -17,7 +17,7 @@ macro_rules! trace_var {
     #[cfg(debug_assertions)]
     {
       use log::*;
-      trace!("{} = {:?}", stringify!($var), $var);
+      trace!("{} = {:#?}", stringify!($var), $var);
     }
   }};
 }
@@ -41,7 +41,7 @@ macro_rules! debug_var {
     #[cfg(debug_assertions)]
     {
       use log::*;
-      debug!("{} = {:?}", stringify!($var), $var);
+      debug!("{} = {:#?}", stringify!($var), $var);
     }
   }};
 }
@@ -65,7 +65,7 @@ macro_rules! info_var {
     #[cfg(debug_assertions)]
     {
       use log::*;
-      info!("{} = {:?}", stringify!($var), $var);
+      info!("{} = {:#?}", stringify!($var), $var);
     }
   }};
 }
@@ -113,5 +113,79 @@ macro_rules! trace_exit {
       use log::*;
       trace!("[EXIT] {} @ line {}", function_name!(), line!());
     }
+  }};
+}
+
+/// Prints a u8 variable, if at RUST_LOG=trace
+#[macro_export]
+macro_rules! trace_u8 {
+  ($var: expr) => {
+    #[cfg(debug_assertions)]
+    trace!("{} = {}", stringify!($var), format_u8!($var));
+  };
+}
+
+/// Prints a u8 variable, if at RUST_LOG=debug
+#[macro_export]
+macro_rules! debug_u8 {
+  ($var: expr) => {
+    #[cfg(debug_assertions)]
+    debug!("{} = {}", stringify!($var), format_u8!($var));
+  };
+}
+
+/// Prints a u8 variable, if at RUST_LOG=info
+#[macro_export]
+macro_rules! info_u8 {
+  ($var: expr) => {
+    #[cfg(debug_assertions)]
+    info!("{} = {}", stringify!($var), format_u8!($var));
+  };
+}
+
+/// Formats a u8 variable in a useful way.
+#[macro_export]
+macro_rules! format_u8 {
+  ($var: expr) => {{
+    if $var & 0x80 > 0 {
+      format!("{:#04X} {:#010b} (+: {}, ±: {})", $var, $var, $var as u8, $var as i8)
+    } else {
+      format!("{:#04X} {:#010b} (+/±: {})", $var, $var, $var as u8)
+    }
+  }};
+}
+
+/// Prints a 3-tuple of u8s, if at RUST_LOG=trace
+#[macro_export]
+macro_rules! trace_3u8 {
+  ($var: expr) => {
+    #[cfg(debug_assertions)]
+    trace!("{} = {}", stringify!($var), format_3u8!($var));
+  };
+}
+
+/// Prints a 3-tuple of u8s, if at RUST_LOG=debug
+#[macro_export]
+macro_rules! debug_3u8 {
+  ($var: expr) => {
+    #[cfg(debug_assertions)]
+    debug!("{} = {}", stringify!($var), format_3u8!($var));
+  };
+}
+
+/// Prints a 3-tuple of u8s, if at RUST_LOG=info
+#[macro_export]
+macro_rules! info_3u8 {
+  ($var: expr) => {
+    #[cfg(debug_assertions)]
+    info!("{} = {}", stringify!($var), format_3u8!($var));
+  };
+}
+
+/// Formats a 3-tuple of u8s in useful ways.
+#[macro_export]
+macro_rules! format_3u8 {
+  ($var: expr) => {{
+    format!("#{:02X}{:02X}{:02X} ({:#010b}, {:#010b}, {:#010b}) (+/±: ({}, {}, {}))", $var.0, $var.1, $var.2, $var.0, $var.1, $var.2, $var.0, $var.1, $var.2)
   }};
 }
