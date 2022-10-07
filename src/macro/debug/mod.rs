@@ -40,7 +40,7 @@ macro_rules! debug_var {
   ($var: expr) => {{
     #[cfg(debug_assertions)]
     {
-      use log::*;
+      use ::log::*;
       debug!("{} = {:#?}", stringify!($var), $var);
     }
   }};
@@ -64,7 +64,7 @@ macro_rules! info_var {
   ($var: expr) => {{
     #[cfg(debug_assertions)]
     {
-      use log::*;
+      use ::log::*;
       info!("{} = {:#?}", stringify!($var), $var);
     }
   }};
@@ -87,7 +87,7 @@ macro_rules! trace_enter {
   () => {{
     #[cfg(debug_assertions)]
     {
-      use log::*;
+      use ::log::*;
       trace!("[ENTER] {} @ line {}", function_name!(), line!());
     }
   }};
@@ -110,7 +110,7 @@ macro_rules! trace_exit {
   () => {{
     #[cfg(debug_assertions)]
     {
-      use log::*;
+      use ::log::*;
       trace!("[EXIT] {} @ line {}", function_name!(), line!());
     }
   }};
