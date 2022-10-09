@@ -70,6 +70,30 @@ macro_rules! info_var {
   }};
 }
 
+/// Logs a variable and its value unconditionally
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate volmark;
+/// # use volmark::*;
+/// # #[named]
+/// # fn main() {
+/// let five = 5;
+/// print_var!(five);
+/// # }
+/// ```
+#[macro_export]
+macro_rules! print_var {
+  ($var: expr) => {{
+    #[cfg(debug_assertions)]
+    {
+      use ::log::*;
+      println!("{} = {:#?}", stringify!($var), $var);
+    }
+  }};
+}
+
 /// Traces entry into a function, if at RUST_LOG=trace
 ///
 /// # Examples
